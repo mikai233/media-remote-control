@@ -32,10 +32,11 @@ class RemotePage extends StatefulWidget {
 
 class _RemotePageState extends State<RemotePage> {
   final _iconSize = 50.0;
-  final _iconPadding = 10.0;
+  final _iconPadding = 5.0;
   final _controller = TextEditingController();
   var _baseUrl = '';
   final _dio = Dio();
+  var focus = FocusNode();
 
   @override
   void initState() {
@@ -59,6 +60,7 @@ class _RemotePageState extends State<RemotePage> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 28.0, vertical: 10.0),
             child: TextField(
+              focusNode: focus,
               controller: _controller,
               decoration: InputDecoration(
                 hintText: 'remote server eg. http://192.168.1.100:7389',
@@ -76,6 +78,7 @@ class _RemotePageState extends State<RemotePage> {
           Row(
             children: [
               _buildIcon(Icons.skip_previous, onPressed: () async {
+                focus.unfocus();
                 try {
                   await request(Cmd.Previous);
                 } catch (e) {
@@ -83,6 +86,7 @@ class _RemotePageState extends State<RemotePage> {
                 }
               }),
               _buildIcon(Icons.play_arrow, onPressed: () async {
+                focus.unfocus();
                 try {
                   await request(Cmd.PlayPause);
                 } catch (e) {
@@ -90,6 +94,7 @@ class _RemotePageState extends State<RemotePage> {
                 }
               }),
               _buildIcon(Icons.skip_next, onPressed: () async {
+                focus.unfocus();
                 try {
                   await request(Cmd.Next);
                 } catch (e) {
@@ -97,29 +102,37 @@ class _RemotePageState extends State<RemotePage> {
                 }
               }),
               _buildIcon(Icons.stop, onPressed: () async {
+                focus.unfocus();
                 try {
                   await request(Cmd.Stop);
                 } catch (e) {
                   showErr(e.toString());
                 }
               }),
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          Row(
+            children: [
+              _buildIcon(Icons.indeterminate_check_box, onPressed: () async {
+                focus.unfocus();
+                try {
+                  await request(Cmd.VolumeDown);
+                } catch (e) {
+                  showErr(e.toString());
+                }
+              }),
               _buildIcon(Icons.add_box, onPressed: () async {
+                focus.unfocus();
                 try {
                   await request(Cmd.VolumeUp);
                 } catch (e) {
                   showErr(e.toString());
                 }
               }),
-              _buildIcon(Icons.indeterminate_check_box, onPressed: () async {
-                try {
-                  await request(Cmd.VolumeDown);
-                } catch (e) {
-                  showErr(e.toString());
-                }
-              })
             ],
             mainAxisAlignment: MainAxisAlignment.center,
-          ),
+          )
         ],
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

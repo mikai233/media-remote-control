@@ -42,6 +42,8 @@ async fn media(info: actix_web::web::Query<Req>) -> actix_web::Result<HttpRespon
         Cmd::VolumeMute => simulate::press(Key::VolumeMute),
     };
     println!("{:?}", info.0);
-    let mut resp = HttpResponse::Ok();
-    Ok(resp.finish())
+    let resp = HttpResponse::Ok()
+        .insert_header(("Access-Control-Allow-Origin", "*"))
+        .finish();
+    Ok(resp)
 }
