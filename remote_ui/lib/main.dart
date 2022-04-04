@@ -35,7 +35,7 @@ class _RemotePageState extends State<RemotePage> {
   final _iconPadding = 5.0;
   final _controller = TextEditingController();
   var _baseUrl = '';
-  final _dio = Dio();
+  final _dio = Dio(BaseOptions(connectTimeout: 3000));
   var focus = FocusNode();
 
   @override
